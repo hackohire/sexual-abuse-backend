@@ -1,0 +1,36 @@
+{
+  "name": "sexulabuse-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "env-example.yml",
+  "scripts": {
+    "start": "sls offline start",
+    "debug": "SET SLS_DEBUG=* && node --inspect %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\serverless\\bin\\serverless offline -s dev",
+    "deploy": "sls deploy",
+    "lint": "eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "serverless": "^1.44.1",
+    "serverless-domain-manager": "^3.2.6",
+    "serverless-offline": "^5.3.2"
+  },
+  "dependencies": {
+    "amazon-cognito-identity-js": "^3.0.13",
+    "apollo-server-lambda": "^2.6.2",
+    "aws-sdk": "^2.493.0",
+    "bluebird": "^3.5.5",
+    "ejs": "^2.7.1",
+    "email-templates-v2": "^2.0.3",
+    "graphql": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.1",
+    "jwks-rsa": "^1.5.1",
+    "lodash": "^4.17.14",
+    "mongoose": "^5.5.14",
+    "nodemailer": "^6.3.0",
+    "uuid-apikey": "^1.4.3"
+  }
+}

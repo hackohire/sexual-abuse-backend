@@ -1,0 +1,81 @@
+service: sexulabuseapi
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ap-south-1
+  stage: dev
+  environment:
+    MONGODB_URL: ${file(env.yml):${self:provider.stage}.MONGODB_URL}
+    MONGODB_DBNAME: ${file(env.yml):${self:provider.stage}.MONGODB_DBNAME}
+    AWS_ACCESSKEY_ID: ${file(env.yml):${self:provider.stage}.AWS_ACCESSKEY_ID}
+    AWS_SECRETKEY: ${file(env.yml):${self:provider.stage}.AWS_SECRETKEY}
+    AWS_SES_REGION: ${file(env.yml):${self:provider.stage}.AWS_SES_REGION}
+    AWS_COGNITO_REGION: ${file(env.yml):${self:provider.stage}.AWS_COGNITO_REGION}
+    AWS_COGNITO_USERPOOL_ID: ${file(env.yml):${self:provider.stage}.AWS_COGNITO_USERPOOL_ID}
+    FRONT_END_URL: ${file(env.yml):${self:provider.stage}.FRONT_END_URL}
+    AWS_COGNITO_CLIENT_ID: ${file(env.yml):${self:provider.stage}.AWS_COGNITO_CLIENT_ID}
+    SMTP_HOST: ${file(env.yml):${self:provider.stage}.SMTP_HOST}
+    SMTP_PORT: ${file(env.yml):${self:provider.stage}.SMTP_PORT}
+    SMTP_USER: ${file(env.yml):${self:provider.stage}.SMTP_USER}
+    SMTP_PASSWORD: ${file(env.yml):${self:provider.stage}.SMTP_PASSWORD}
+    FROM_EMAIL: ${file(env.yml):${self:provider.stage}.FROM_EMAIL}
+functions:
+  graphql:
+    handler: handler.graphqlHandler
+    # role: ServiceRole
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
+  hello:
+    handler: handler1.hello
+    events:
+      - http:
+          path: hello
+          method: GET
+          cors: true
+
+resources:
+  Resources:
+    # This response is needed for custom authorizer failures cors support ¯\_(ツ)_/¯
+    GatewayResponse:
+      Type: "AWS::ApiGateway::GatewayResponse"
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
+        StatusCode: "401"
+    AuthFailureGatewayResponse:
+      Type: "AWS::ApiGateway::GatewayResponse"
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
+        StatusCode: "401"
+
+plugins:
+  - serverless-offline
+  # - serverless-domain-manager
+
+custom:
+  serverless-offline:
+    port: 3200
+#   customDomain:
+#     domainName: sarkazein7.tech
+#     stage: prod
+#     basePath: ''
+#     certificateName: '*.sarkazein7.tech'
+#     createRoute53Record: true
+#     endpointType: 'regional'
