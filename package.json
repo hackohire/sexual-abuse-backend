@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^3.0.13",
-    "apollo-server-lambda": "^2.6.2",
+    "apollo-server-lambda": "^2.14.2",
     "aws-sdk": "^2.493.0",
     "bluebird": "^3.5.5",
     "ejs": "^2.7.1",
